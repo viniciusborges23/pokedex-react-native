@@ -8,6 +8,7 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import pokemons from './pokemons';
 
 interface Pokemons {
 	results: PokemonListItem[];
@@ -18,43 +19,16 @@ interface PokemonListItem {
 	url: String;
 }
 
-const pokemons = [
-	{
-		id: '001',
-		name: 'Bulbasaur',
-		img: 'https://cdn.bulbagarden.net/upload/2/21/001Bulbasaur.png',
-		types: [
-			{ id: 1, name: 'grass' },
-			{ id: 2, name: 'poison' },
-		],
-	},
-	{
-		id: '002',
-		name: 'Ivysaur',
-		img: 'https://cdn.bulbagarden.net/upload/7/73/002Ivysaur.png',
-		types: [
-			{ id: 1, name: 'grass' },
-			{ id: 2, name: 'poison' },
-		],
-	},
-	{
-		id: '003',
-		name: 'Venusaur',
-		img: 'https://cdn.bulbagarden.net/upload/a/ae/003Venusaur.png',
-		types: [
-			{ id: 1, name: 'grass' },
-			{ id: 2, name: 'poison' },
-		],
-	},
-	{
-		id: '004',
-		name: 'Charmandar',
-		img: 'https://cdn.bulbagarden.net/upload/7/73/004Charmander.png',
-		types: [{ id: 1, name: 'fire' }],
-	},
-];
+// #40A0CD
+// #366FC6
+// #3D3D38
+// #E4362B
+// #F7A61B
+// #159F6E
+// #B0B8C7
+// #F5F6F7
 
-export default function PokemonsList() {
+export default function PokemonsList({ navigation }) {
 	useEffect(() => {
 		async function fetchPokemons(): Promise<any> {
 			const { data } = await axios.get<Pokemons>(
@@ -67,15 +41,12 @@ export default function PokemonsList() {
 		fetchPokemons();
 	}, []);
 
-	function handlePress() {
-		console.log('oi');
+	function handlePress(id) {
+		navigation.navigate('Pokemon', { id })
 	}
 
 	return (
 		<View style={styles.container}>
-			{/* <Text>What pokemon are you loking for?</Text>
-			<TextInput placeholder='Search pokemon, move, ability, etc' /> */}
-
 			<FlatList
 				numColumns={2}
 				keyExtractor={({ id }) => id}
@@ -83,14 +54,12 @@ export default function PokemonsList() {
 				renderItem={({ item }) => (
 					<TouchableOpacity
 						style={{ flex: 1, justifyContent: 'space-between' }}
-						onPress={handlePress}
+						onPress={() => handlePress(item.id)}
 					>
 						<View style={[styles.card, styles[item.types[0].name]]}>
 							<View style={styles.cardHeader}>
 								<Text style={styles.cardTitle}>{item.name}</Text>
-								<Text style={styles.cardNumber}>#{item.id}</Text>
-							</View>
-							<View style={styles.cardBody}>
+								{/* <Text style={styles.cardNumber}>#{item.id}</Text> */}
 								<View>
 									{item.types.map(type => (
 										<Text style={styles.cardTag} key={type.id}>
@@ -98,8 +67,10 @@ export default function PokemonsList() {
 										</Text>
 									))}
 								</View>
+							</View>
+							<View style={styles.cardBody}>
 								<Image
-									style={{ width: 64, height: 64 }}
+									style={{ width: 92, height: 92 }}
 									source={{ uri: item.img }}
 								/>
 							</View>
@@ -113,9 +84,8 @@ export default function PokemonsList() {
 
 const styles = StyleSheet.create({
 	container: {
-		// flex: 1,
-		backgroundColor: '#fff',
-		paddingTop: 40,
+		flex: 1,
+		backgroundColor: '#F5F6F7',
 		padding: 16,
 		flexDirection: 'row',
 	},
@@ -126,35 +96,39 @@ const styles = StyleSheet.create({
 		padding: 8,
 		margin: 4,
 		borderRadius: 12,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 	},
 	cardHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
+		// marginBottom: 8,
+		// justifyContent: 'space-between',
 	},
 	cardBody: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
+		// flexDirection: 'row',
+		// justifyContent: 'space-between',
 	},
 	cardNumber: {
-		color: '#fff',
+		color: '#F5F6F7',
 		fontWeight: 'bold',
 		fontSize: 18,
 	},
 	cardTitle: {
-		color: '#fff',
+		color: '#F5F6F7',
 		fontWeight: 'bold',
 		fontSize: 18,
+		marginBottom: 8,
 	},
 	cardTag: {
-		backgroundColor: '#abebc7', // f29a94
-		color: '#fff',
+		backgroundColor: 'rgba(255,255,255,0.4)', 
+		color: '#F5F6F7',
 		borderRadius: 16,
 		paddingVertical: 4,
 		paddingHorizontal: 8,
+		marginVertical: 2,
 		textAlign: 'center',
 	},
 	grass: {
-		backgroundColor: '#6bd199',
+		backgroundColor: '#159F6E',
 	},
 	fire: {
 		backgroundColor: '#f2665c',
